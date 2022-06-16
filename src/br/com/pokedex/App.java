@@ -6,24 +6,22 @@ import org.json.JSONObject;
 
 import br.com.pokedex.network.HTTPRequest;
 
+import java.util.Scanner;
+
 public class App {
     public static void main(String[] args) throws Exception {
+        JSONObject object = new HTTPRequest().requestGetMethod("https://pokeapi.co/api/v2/pokemon?limit=151");
 
-        JSONObject object = new HTTPRequest()
-                .requestGetMethod("https://pokeapi.co/api/v2/pokemon?limit=151");
+        int count = object.getInt("count");
+        System.out.println("Total: " + count);
 
-        // int count = object.getInt("count");
-        // String next = object.getString("next");
-        JSONArray array = object.getJSONArray("results");
+        JSONArray listPokemonData = object.getJSONArray("results");
+        for (int index = 0; index < listPokemonData.length(); index++) {
+            JSONObject pokemonData = listPokemonData.getJSONObject(index);
 
-        for (int index = 0; index < array.length(); index++) {
-
-            JSONObject pokeObject = array.getJSONObject(index);
-
-            String pokeNome = pokeObject.getString("name");
-            String pokeUrl = pokeObject.getString("url");
-            System.out.println(pokeNome + " - " + pokeUrl);
+            String name = pokemonData.getString("name");
+            String url = pokemonData.getString("url");
+            System.out.println(index + " - " + name + " - " + url);
         }
-
     }
 }
